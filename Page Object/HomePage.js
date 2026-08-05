@@ -62,6 +62,7 @@ export class HomePage {
             if(priceCount>0){
                  price = (await productContainer.locator(".a-price-whole").textContent()).replace(/,/g,"");
                  console.log(price);
+                 console.log("");
             }
             const addTocart = await productContainer.getByRole('button', { name: 'Add to cart' });
             const addToCartAvailable=await productContainer.getByRole('button', { name: 'Add to cart' }).count();
