@@ -13,6 +13,7 @@ export class HomePage {
         this.option = page.getByRole('button', { name: 'Mobiles, Computers' });
         this.monitors = page.getByText('Monitors').nth(0);
         this.products = page.locator("div[role='listitem'] div[class='sg-col-inner']");
+        this.productContainer=page.locator("div[class='listitem']");
     }
     async launchURL() {
         await this.page.goto(this.url);
@@ -57,22 +58,22 @@ export class HomePage {
         const products=await this.products.all();
         console.log(products.length);
         for (let i = 0; i < products.length; i++) {
-            const priceCount = await productContainer.locator(".a-price-whole").count();
+            const priceCount = await this.productContainer.locator(".a-price-whole").count();
             let price;
             if(priceCount>0){
-                 price = (await productContainer.locator(".a-price-whole").textContent()).replace(/,/g,"");
+                 price = (await this.productContainer.locator(".a-price-whole").textContent()).replace(/,/g,"");
                  console.log(price);
                  
             }
-            const addTocart = await productContainer.getByRole('button', { name: 'Add to cart' });
-            const addToCartAvailable=await productContainer.getByRole('button', { name: 'Add to cart' }).count();
+            const addTocart = await this.productContainer.getByRole('button', { name: 'Add to cart' });
+            const addToCartAvailable=await this.productContainer.getByRole('button', { name: 'Add to cart' }).count();
             const container = this.page.locator('.a-popover.a-popover-modal.a-declarative');
-            const productName = await productContainer.locator("div[class='sg-col-inner'] h2");
+            const productName = (await this.productContainer.locator("div[class='sg-col-inner'] h2").textContent());;
             console.log(await productName);
             const intPrice = parseInt(await price);
             if (intPrice < 1000 && addToCartAvailable>0) {
                 addedCount++
-                console.log(await productName.textContent());
+                //console.log(await productName.textContent());
                 console.log(intPrice);
                 await addTocart.click();
                 await container.getByRole('button', { name: 'Add to cart' }).highlight();
